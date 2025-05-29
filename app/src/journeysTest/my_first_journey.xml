@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><!-- @formatter:off -->
+<journey name="My first Journey">
+    <description>A Journey that tests the home page</description>
+    <actions>
+        <action>tap on Click Me and verify that Button Clicked text is visible on the screen</action></actions>
+</journey>
