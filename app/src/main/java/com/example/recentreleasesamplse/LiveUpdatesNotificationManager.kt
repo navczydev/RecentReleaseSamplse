@@ -49,22 +49,6 @@ object LiveUpdatesNotificationManager {
         }
     }
 
-
-    fun start() {
-        Log.d(TAG, "start: ")
-        /* for (state in OrderState.entries) {
-             val notification = state.buildNotification().build()
-             // it has characteristics that maker it eligible as a live update
- //            val isPromotable = notification.hasPromotableCharacteristics()
-             Handler(Looper.getMainLooper()).postDelayed(
-                 {
-                     notificationManager.notify(NOTIFICATION_ID, notification)
-                 },
-                 state.delay,
-             )
-         }*/
-    }
-
     fun buildBaseNotification(
         appContext: Context,
     ): Notification.Builder {
