@@ -207,6 +207,7 @@ object LiveUpdatesNotificationManager {
             }
         }
         val notification = notificationBuilder.build()
+        val isPromotable = notification.hasPromotableCharacteristics()
         notificationManager.notify(NOTIFICATION_ID, notification)
     }
 

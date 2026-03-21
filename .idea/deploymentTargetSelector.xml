@@ -4,23 +4,28 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2026-03-04T02:24:35.623269Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/navsingh/.android/avd/Pixel_10.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="OverflowingVerticalFloatingToolbarSample">
+      <SelectionState runConfigName="PlainTooltipWithCaretEndOfAnchor">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="LoadingIndicatorSample">
+      <SelectionState runConfigName="PlainTooltipWithCaretStartOfAnchor">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="HorizontalFloatingToolbarWithFabSample">
+      <SelectionState runConfigName="RichTooltipWithManualInvocationSample">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ExitAlwaysBottomAppBarSpacedEvenly">
+      <SelectionState runConfigName="BenefitsCard">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testButtonGroup()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
-      <SelectionState runConfigName="my_first_journey.xml (My first Journey)">
+      <SelectionState runConfigName="BenefitsCardPre">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

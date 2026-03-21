@@ -1,136 +1,252 @@
 package com.example.recentreleasesamplse
 
+//import androidx.compose.material3.FlexibleBottomAppBar
+import android.R.attr.type
+import android.app.Activity
 import android.app.NotificationManager
+import android.app.StatusBarManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.EXTRA_USE_SYSTEM_CONTACTS_PICKER
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.provider.ContactsPickerSessionContract
+import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresExtension
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.automirrored.filled.Label
-import androidx.compose.material.icons.automirrored.filled.Message
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Archive
-import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Contacts
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.People
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Snooze
-import androidx.compose.material3.AppBarColumn
-import androidx.compose.material3.AppBarRow
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ContainedLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FilledIconButton
-import androidx.compose.material3.FlexibleBottomAppBar
-import androidx.compose.material3.FloatingActionButtonMenu
-import androidx.compose.material3.FloatingActionButtonMenuItem
-import androidx.compose.material3.FloatingToolbarDefaults
-import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
-import androidx.compose.material3.FloatingToolbarDefaults.floatingToolbarVerticalNestedScroll
-import androidx.compose.material3.HorizontalFloatingToolbar
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LoadingIndicator
-import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
-import androidx.compose.material3.SplitButtonDefaults
-import androidx.compose.material3.SplitButtonLayout
 import androidx.compose.material3.Text
-import androidx.compose.material3.ToggleFloatingActionButton
-import androidx.compose.material3.ToggleFloatingActionButtonDefaults
-import androidx.compose.material3.ToggleFloatingActionButtonDefaults.animateIcon
-import androidx.compose.material3.VerticalFloatingToolbar
-import androidx.compose.material3.animateFloatingActionButton
-import androidx.compose.material3.rememberSliderState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.customActions
-import androidx.compose.ui.semantics.isTraversalGroup
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.semantics.traversalIndex
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.IconCompat
+import androidx.photopicker.compose.ExperimentalPhotoPickerComposeApi
 import com.example.recentreleasesamplse.ui.theme.RecentReleaseSamplseTheme
-import kotlin.random.Random
+
 
 class MainActivity : ComponentActivity() {
+    private val TAG = "MainActivity"
+
+    @OptIn(ExperimentalPhotoPickerComposeApi::class, ExperimentalMaterial3Api::class)
+    @RequiresExtension(extension = Build.VERSION_CODES.UPSIDE_DOWN_CAKE, version = 15)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.getSystemService<StatusBarManager?>(StatusBarManager::class.java)
+
+        ComponentName(
+            this.applicationContext,
+            MyQSTileService::class.java.name
+        )
+
+        IconCompat.createWithResource(
+            applicationContext,
+            R.drawable.ic_launcher_foreground,
+        )
         enableEdgeToEdge()
         setContent {
             RecentReleaseSamplseTheme {
+                LocalContext.current
+
                 val notificationManager =
-                    LocalContext.current.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    LocalContext.current.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
                 LiveUpdatesNotificationManager.initialize(
                     LocalContext.current.applicationContext,
                     notificationManager
                 )
 
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    /*Greeting(
+
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .safeDrawingPadding()
+                ) { innerPadding ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+//                            .verticalScroll(rememberScrollState())
+                    ) {
+//                        EyeDropperDemo()
+                        ContactPickerDemo()
+                        /*  OneLineListItem()
+                          TwoLineListItem()
+                          ThreeLineListItemWithOverlineAndSupporting()
+                          ThreeLineListItemWithExtendedSupporting()
+                          ClickableListItemSample()
+                          ClickableListItemWithClickableChildSample()
+                          SingleSelectionListItemSample()
+                          MultiSelectionListItem()
+                          ListItemWithModeChangeOnLongClickSample()
+                          SingleSelectionSegmentedListItem()
+                          MultiSelectionSegmentedListItem()
+                          SegmentedListItemWithExpansion()*/
+                    }
+
+                    /* var shouldShow by remember {
+                         mutableStateOf(false)
+                     }
+                     val state = rememberEmbeddedPhotoPickerState(
+                         onSelectionComplete = {
+                             Log.d(TAG, "onCreate: Selection done!")
+                         }
+                     )
+                     val updateVisibility = remember {
+                         mutableStateOf(true)
+                     }
+
+                     Log.d(TAG, "onCreate: ${state.isReady}, ${updateVisibility.value}")
+                     *//*Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
-                    )*/
-                    OrderScreen()
+                    )*//*
+                    Column(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .padding(64.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        // This box will not be visible
+                        // but will still occupy 200.dp x 200.dp of space.
+                        Box(modifier = Modifier.border(
+                            width = 16.dp,
+                            color = Color.Blue
+                        )) {
+                            Box(
+                                modifier = Modifier
+                                    .size(200.dp)
+                                    .background(Color.Red)
+                                    .border(
+                                        width = 8.dp,
+                                        color = Color.Cyan
+                                    )
+                                    .visible(false)
+                                    .background(Color.Yellow)
+                                    .border(
+                                        width = 14.dp,
+                                        color = Color.Green
+                                    )
+                            )
+                        }
+                        Text("Invisible text!",
+                            modifier = Modifier
+                                    .alpha(0f))
+                        Button(onClick = {
+                            shouldShow = !shouldShow
+                        }, modifier = Modifier.alpha(0f)) {
+                            Text("Update")
+                        }
+                        Spacer(modifier = Modifier.size(16.dp))
+                        AnimatedVisibility(shouldShow) {
+                            Text("Text under AnimatedVisibility!")
+                        }
+                        DynamicPositionTooltipSample()
+                        PlainTooltipWithCaretRightOfAnchor()
+                        var passwordHidden by rememberSaveable { mutableStateOf(true) }
+                        SecureTextField(
+                            state = rememberTextFieldState(),
+                            label = { Text("Enter password") },
+                            textObfuscationMode =
+                                if (passwordHidden) TextObfuscationMode.RevealLastTyped
+                                else TextObfuscationMode.Visible,
+                            trailingIcon = {
+                                // Provide localized description for accessibility services
+                                val description =
+                                    if (passwordHidden) "Show password" else "Hide password"
+                                TooltipBox(
+                                    positionProvider =
+                                        TooltipDefaults.rememberTooltipPositionProvider(
+                                            TooltipAnchorPosition.Above
+                                        ),
+                                    tooltip = { PlainTooltip { Text(description) } },
+                                    state = rememberTooltipState(),
+                                ) {
+                                    IconButton(onClick = { passwordHidden = !passwordHidden }) {
+                                        val visibilityIcon =
+                                            if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                                        Icon(
+                                            imageVector = visibilityIcon,
+                                            contentDescription = description
+                                        )
+                                    }
+                                }
+                            },
+                        )
+                        // OrderScreen()
+                        *//* if (updateVisibility.value) {
+                             EmbeddedPhotoPicker(
+                                 modifier = Modifier.fillMaxHeight(0.7f),
+                                 state = state
+                             )
+                         }
+
+                         OutlinedButton(
+                             onClick = {
+                                 state.onSelectionComplete()
+                                 updateVisibility.value = false
+                                 Log.d(TAG, "onCreate: ${state.selectedMedia}")
+                             },
+                             modifier = Modifier.fillMaxWidth()
+                         ) {
+                             Text("Done")
+                         }
+
+                         OutlinedButton(
+                             onClick = {
+                                 Log.d(TAG, "onCreate: Add tile")
+                                 statusBarService?.requestAddTileService(
+                                     componentName,
+                                     "Quick settings..",
+                                     icon.toIcon(context),
+                                     mainExecutor
+                                 ) { result ->
+                                     Log.d(TAG, "onCreate: Result is $result")
+                                 }
+                             },
+                             modifier = Modifier.fillMaxWidth()
+                         ) {
+                             Text("Request to add tile")
+                         }*//*
+                    }*/
                 }
             }
         }
     }
+
 }
 
-@Composable
+/*@Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     var updateText by remember { mutableStateOf("") }
     Column {
@@ -231,7 +347,7 @@ fun OverflowingVerticalFloatingToolbarSample() {
                             }
                         ) {
                             clickableItem(
-                                onClick = { /* doSomething() */ },
+                                onClick = { *//* doSomething() *//* },
                                 icon = {
                                     Icon(
                                         Icons.Filled.Download,
@@ -241,7 +357,7 @@ fun OverflowingVerticalFloatingToolbarSample() {
                                 label = "Download"
                             )
                             clickableItem(
-                                onClick = { /* doSomething() */ },
+                                onClick = { *//* doSomething() *//* },
                                 icon = {
                                     Icon(
                                         Icons.Filled.Favorite,
@@ -251,7 +367,7 @@ fun OverflowingVerticalFloatingToolbarSample() {
                                 label = "Favorite"
                             )
                             clickableItem(
-                                onClick = { /* doSomething() */ },
+                                onClick = { *//* doSomething() *//* },
                                 icon = {
                                     Icon(
                                         Icons.Filled.Add,
@@ -261,7 +377,7 @@ fun OverflowingVerticalFloatingToolbarSample() {
                                 label = "Add"
                             )
                             clickableItem(
-                                onClick = { /* doSomething() */ },
+                                onClick = { *//* doSomething() *//* },
                                 icon = {
                                     Icon(
                                         Icons.Filled.Person,
@@ -271,7 +387,7 @@ fun OverflowingVerticalFloatingToolbarSample() {
                                 label = "Person"
                             )
                             clickableItem(
-                                onClick = { /* doSomething() */ },
+                                onClick = { *//* doSomething() *//* },
                                 icon = {
                                     Icon(
                                         Icons.Filled.ArrowUpward,
@@ -285,7 +401,7 @@ fun OverflowingVerticalFloatingToolbarSample() {
                     content = {
                         FilledIconButton(
                             modifier = Modifier.height(64.dp),
-                            onClick = { /* doSomething() */ }
+                            onClick = { *//* doSomething() *//* }
                         ) {
                             Icon(Icons.Filled.Add, contentDescription = "Localized description")
                         }
@@ -328,7 +444,7 @@ fun HorizontalFloatingToolbarWithFabSample() {
                 floatingActionButton = {
                     // Match the FAB to the vibrantColors. See also StandardFloatingActionButton.
                     FloatingToolbarDefaults.VibrantFloatingActionButton(
-                        onClick = { /* doSomething() */ },
+                        onClick = { *//* doSomething() *//* },
                     ) {
                         Icon(Icons.Filled.Add, "Localized description")
                     }
@@ -339,16 +455,16 @@ fun HorizontalFloatingToolbarWithFabSample() {
                         .offset(x = -ScreenOffset, y = -ScreenOffset),
                 colors = vibrantColors,
                 content = {
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(onClick = { *//* doSomething() *//* }) {
                         Icon(Icons.Filled.Person, contentDescription = "Localized description")
                     }
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(onClick = { *//* doSomething() *//* }) {
                         Icon(Icons.Filled.Edit, contentDescription = "Localized description")
                     }
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(onClick = { *//* doSomething() *//* }) {
                         Icon(Icons.Filled.Favorite, contentDescription = "Localized description")
                     }
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(onClick = { *//* doSomething() *//* }) {
                         Icon(Icons.Filled.MoreVert, contentDescription = "Localized description")
                     }
                 },
@@ -389,7 +505,7 @@ fun FilledSplitButtonSample() {
         SplitButtonLayout(
             leadingButton = {
                 SplitButtonDefaults.LeadingButton(
-                    onClick = { /* Do Nothing */ },
+                    onClick = { *//* Do Nothing *//* },
                 ) {
                     Icon(
                         Icons.Filled.Edit,
@@ -417,7 +533,7 @@ fun FilledSplitButtonSample() {
         SplitButtonLayout(
             leadingButton = {
                 SplitButtonDefaults.ElevatedLeadingButton(
-                    onClick = { /* Do Nothing */ },
+                    onClick = { *//* Do Nothing *//* },
                 ) {
                     Icon(
                         Icons.Filled.Edit,
@@ -454,7 +570,7 @@ fun FilledSplitButtonSample() {
             spacing = 8.dp,
             leadingButton = {
                 SplitButtonDefaults.OutlinedLeadingButton(
-                    onClick = { /* Do Nothing */ },
+                    onClick = { *//* Do Nothing *//* },
                 ) {
                     Icon(
                         Icons.Filled.Edit,
@@ -601,7 +717,7 @@ fun ExitAlwaysBottomAppBarSpacedEvenly() {
                 contentPadding = PaddingValues(horizontal = 0.dp),
                 scrollBehavior = scrollBehavior,
                 content = {
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(onClick = { *//* doSomething() *//* }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Localized description"
@@ -610,11 +726,11 @@ fun ExitAlwaysBottomAppBarSpacedEvenly() {
 
                     FilledIconButton(
                         modifier = Modifier.width(56.dp),
-                        onClick = { /* doSomething() */ }
+                        onClick = { *//* doSomething() *//* }
                     ) {
                         Icon(Icons.Filled.Add, contentDescription = "Localized description")
                     }
-                    IconButton(onClick = { /* doSomething() */ }) {
+                    IconButton(onClick = { *//* doSomething() *//* }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = "Localized description"
@@ -643,7 +759,8 @@ fun ExitAlwaysBottomAppBarSpacedEvenly() {
     )
 }
 
-/** A sample for a [FlexibleBottomAppBar] with an overflow behavior when the content doesn't fit. */
+*/
+/** A sample for a [FlexibleBottomAppBar] with an overflow behavior when the content doesn't fit. *//*
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Preview
 @Composable
@@ -671,7 +788,7 @@ fun BottomAppBarWithOverflow() {
             }
         ) {
             clickableItem(
-                onClick = { /* doSomething() */ },
+                onClick = { *//* doSomething() *//* },
                 icon = {
                     Icon(
                         Icons.AutoMirrored.Filled.ArrowBack,
@@ -681,7 +798,7 @@ fun BottomAppBarWithOverflow() {
                 label = "ArrowBack"
             )
             clickableItem(
-                onClick = { /* doSomething() */ },
+                onClick = { *//* doSomething() *//* },
                 icon = {
                     Icon(
                         Icons.AutoMirrored.Filled.ArrowForward,
@@ -691,22 +808,22 @@ fun BottomAppBarWithOverflow() {
                 label = "ArrowForward"
             )
             clickableItem(
-                onClick = { /* doSomething() */ },
+                onClick = { *//* doSomething() *//* },
                 icon = { Icon(Icons.Filled.Add, contentDescription = "Localized description") },
                 label = "Add"
             )
             clickableItem(
-                onClick = { /* doSomething() */ },
+                onClick = { *//* doSomething() *//* },
                 icon = { Icon(Icons.Filled.Check, contentDescription = "Localized description") },
                 label = "Check"
             )
             clickableItem(
-                onClick = { /* doSomething() */ },
+                onClick = { *//* doSomething() *//* },
                 icon = { Icon(Icons.Filled.Edit, contentDescription = "Localized description") },
                 label = "Edit"
             )
             clickableItem(
-                onClick = { /* doSomething() */ },
+                onClick = { *//* doSomething() *//* },
                 icon = {
                     Icon(Icons.Filled.Favorite, contentDescription = "Localized description")
                 },
@@ -714,4 +831,200 @@ fun BottomAppBarWithOverflow() {
             )
         }
     }
+}*/
+
+@Composable
+fun EyeDropperDemo() {
+    var pickedColor by remember { mutableStateOf(Color.Black) }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.getIntExtra(
+                Intent.EXTRA_COLOR,
+                Color.Black.value.toInt()
+            )?.let { colorInt ->
+                Log.d("EyeDropperDemo", "EyeDropperDemo: Picked color: $colorInt")
+                pickedColor = Color(colorInt)
+            }
+        }
+    }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painterResource(R.drawable.android17),
+            ""
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("EyeDropper API Sample!", style = MaterialTheme.typography.headlineLarge)
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = {
+                // Launch EyeDropper intent (Android 17+)
+                val intent = Intent(Intent.ACTION_OPEN_EYE_DROPPER)
+                launcher.launch(intent)
+            }
+        ) {
+            Text("Pick Color 🎨 from Screen")
+        }
+
+        // Show picked color
+        Spacer(modifier = Modifier.height(16.dp))
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .background(pickedColor)
+        )
+    }
 }
+
+@Composable
+fun ContactPickerDemo(modifier: Modifier = Modifier) {
+
+    val context = LocalContext.current
+    // Define the specific data fields you need
+    val requestedFields = arrayListOf(
+//        ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER,
+//        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE,
+//        ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE,
+        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE,
+        ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
+        //CONTENT_ITEM_TYPE
+    )
+
+    val contactPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            Log.d("ContactPickerDemo", "Data is: ${result.data}")
+            // The result data contains the Session URI
+            val sessionUri = result.data?.data
+            Log.d("SessionURI", "ContactPickerDemo: $sessionUri")
+            sessionUri?.let { uri ->
+                // Create a "Data" URI based on the specific contact you picked
+                // This maintains the temporary URI permission grant
+                val detailUri =
+                    Uri.withAppendedPath(uri, ContactsContract.Contacts.Data.CONTENT_DIRECTORY)
+
+                val projection = arrayOf(
+                    ContactsContract.Data.MIMETYPE,
+                    ContactsContract.Data.DATA1,
+                    ContactsContract.Data.DISPLAY_NAME
+                )
+
+                // Query the detailUri, NOT ContactsContract.Data.CONTENT_URI
+                context.contentResolver.query(detailUri, projection, null, null, null)
+                    ?.use { cursor ->
+                        val mimeIdx = cursor.getColumnIndex(ContactsContract.Data.MIMETYPE)
+                        val dataIdx = cursor.getColumnIndex(ContactsContract.Data.DATA1)
+                        val nameIdx = cursor.getColumnIndex(ContactsContract.Data.DISPLAY_NAME)
+
+                        while (cursor.moveToNext()) {
+                            val mimeType = cursor.getString(mimeIdx)
+                            val value = cursor.getString(dataIdx)
+                            val name = cursor.getString(nameIdx)
+
+                            when (mimeType) {
+                                ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE -> Log.d(
+                                    "Picker",
+                                    "Phone: $value"
+                                )
+
+                                ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE -> Log.d(
+                                    "Picker",
+                                    "Email: $value"
+                                )
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+
+// Set up the intent
+//    val pickContactIntent = Intent("android.intent.action.PICK_CONTACTS"/*ContactsPickerSessionContract.ACTION_PICK_CONTACTS*/).apply {
+    val pickContactIntent = Intent("android.provider.action.PICK_CONTACTS"/*ContactsPickerSessionContract.ACTION_PICK_CONTACTS*/).apply {
+//    val pickContactIntent = Intent(Intent.ACTION_PICK).apply {
+//        data =
+//        putExtra(EXTRA_USE_SYSTEM_CONTACTS_PICKER, true)
+        type = ContactsContract.Contacts.CONTENT_TYPE
+        // Enable multi-select
+        // putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        putStringArrayListExtra(
+            ContactsPickerSessionContract.EXTRA_PICK_CONTACTS_REQUESTED_DATA_FIELDS,
+            requestedFields
+        )
+    }
+
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painterResource(R.drawable.android17),
+            ""
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text("EyeDropper API Sample!", style = MaterialTheme.typography.headlineLarge)
+        Text("EyeDropper API Sample!", style = MaterialTheme.LocalMaterialTheme.current.typography.headlineLarge)
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = {
+                // Launch the picker
+                contactPickerLauncher.launch(pickContactIntent)
+
+            }
+        ) {
+            Text("Pick Color 🎨 from Screen")
+        }
+
+        // Show picked color
+        Spacer(modifier = Modifier.height(16.dp))
+    }
+}
+
+private fun processSelectedContacts(sessionUri: Uri, context: Context) {
+    // Define the projection (columns) you want to retrieve
+    // Define the projection (columns) you want to retrieve
+    val projection = arrayOf(
+        ContactsContract.Data.CONTACT_ID,
+        ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
+        ContactsContract.Data.MIMETYPE,
+        ContactsContract.Data.DATA1 // Generic data column (Phone number, Email, etc.)
+    )
+
+
+    context.contentResolver.query(sessionUri, projection, null, null, null)?.use { cursor ->
+        val mimeTypeIdx = cursor.getColumnIndex(ContactsContract.Data.MIMETYPE)
+        val dataIdx = cursor.getColumnIndex(ContactsContract.Data.DATA1)
+        val nameIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
+// Safety check: if any index is -1, your projection is missing a column
+        if (mimeTypeIdx == -1 || dataIdx == -1 || nameIdx == -1) {
+            Log.e("ContactPicker", "Missing columns in projection!")
+            return
+        }
+        while (cursor.moveToNext()) {
+            val mimeType = cursor.getString(mimeTypeIdx)
+            val dataValue = cursor.getString(dataIdx)
+            val name = cursor.getString(nameIdx)
+
+            when (mimeType) {
+                ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE -> {
+                    Log.d("ContactPicker", "Picked Phone: $dataValue for $name")
+                }
+
+                ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE -> {
+                    Log.d("ContactPicker", "Picked Email: $dataValue for $name")
+                }
+            }
+        }
+    }
+}
+

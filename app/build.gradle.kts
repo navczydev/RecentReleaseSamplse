@@ -6,12 +6,14 @@ plugins {
 
 android {
     namespace = "com.example.recentreleasesamplse"
-    compileSdk = 36
+//    compileSdk = 36
+    compileSdkPreview = "CinnamonBun"
 
     defaultConfig {
         applicationId = "com.example.recentreleasesamplse"
-        minSdk = 30
-        targetSdk = 36
+        minSdk = 34
+//        targetSdk = 36
+        targetSdkPreview = "CinnamonBun"
         versionCode = 1
         versionName = "1.0"
 
@@ -27,16 +29,14 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
@@ -48,11 +48,20 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation("androidx.compose.ui:ui:1.9.0-alpha03")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0")
-    implementation("androidx.compose.material:material-icons-extended:1.7.8")
+    // For apps using Compose
+    implementation("androidx.photopicker:photopicker-compose:1.0.0-alpha01")
+    implementation("androidx.compose.foundation:foundation:1.11.0-alpha01")
+    implementation("androidx.compose.foundation:foundation:1.11.0-beta01")
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.compose.material.icons.extended)
 //    implementation(libs.androidx.material3)
-    implementation("androidx.compose.material3:material3-android:1.4.0-alpha15")
+    implementation(libs.androidx.compose.material3.android)
+    implementation(libs.material)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     androidTestImplementation(libs.androidx.ui.test.junit4.accessibility)
     // Needed for createComposeRule(), but not for createAndroidComposeRule<YourActivity>():
     debugImplementation(libs.ui.test.manifest)

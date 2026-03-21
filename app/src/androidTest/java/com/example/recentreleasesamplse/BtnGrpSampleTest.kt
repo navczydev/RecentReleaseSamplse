@@ -42,7 +42,7 @@ class BtnGrpSampleTest {
     @Test
     fun testButtonGroup() {
         composeTestRule.setContent {
-            LoginScreen()
+           // LoginScreen()
         }
         // Accessibility checks are run automatically when performing an action:
         composeTestRule.onNodeWithText("Submit").performClick()

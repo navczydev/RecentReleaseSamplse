@@ -1,3 +1,4 @@
+/*
 package com.example.recentreleasesamplse
 
 import androidx.compose.foundation.clickable
@@ -22,7 +23,8 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Work
-import androidx.compose.material3.ButtonGroup
+import androidx.compose.material3.
+ButtonGroup
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledIconButton
@@ -100,12 +102,14 @@ fun SingleSelectConnectedButtonGroupSample() {
                 checked = selectedIndex == index,
                 onCheckedChange = { selectedIndex = index },
                 modifier = modifiers[index].semantics { role = Role.RadioButton },
-                /* shapes =
+                */
+/* shapes =
                      when (index) {
                          0 -> ButtonGroupDefaults.connectedLeadingButtonShapes()
                          options.lastIndex -> ButtonGroupDefaults.connectedTrailingButtonShapes()
                          else -> ButtonGroupDefaults.connectedMiddleButtonShapes()
-                     }*/
+                     }*//*
+
             ) {
                 Icon(
                     if (selectedIndex == index) checkedIcons[index] else unCheckedIcons[index],
@@ -250,3 +254,4 @@ private fun PrevLoginScreen() {
         LoginScreen()
     }
 }
+*/
