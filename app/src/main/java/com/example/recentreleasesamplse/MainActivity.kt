@@ -242,8 +242,7 @@ fun ContactPickerDemo(modifier: Modifier = Modifier) {
             ""
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text("EyeDropper API Sample!", style = MaterialTheme.typography.headlineLarge)
-        Text("EyeDropper API Sample!", style = MaterialTheme.LocalMaterialTheme.current.typography.headlineLarge)
+        Text("Pick Contact!", style = MaterialTheme.LocalMaterialTheme.current.typography.headlineLarge)
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
@@ -252,7 +251,7 @@ fun ContactPickerDemo(modifier: Modifier = Modifier) {
 
             }
         ) {
-            Text("Pick Color 🎨 from Screen")
+            Text("Pick contact 📱")
         }
 
         // Show picked color
