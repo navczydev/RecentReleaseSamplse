@@ -3,8 +3,6 @@ package com.example.recentreleasesamplse
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
-import android.util.Log
-import androidx.activity.compose.LocalActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -16,14 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -40,8 +37,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-private const val TAG = "ChatIntentScreen"
-
 @SuppressLint("ComposeModifierMissing")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -50,6 +45,7 @@ fun ChatIntentScreen(
     onMinimize: () -> Unit = {}
 ) {
     val mainViewModel = viewModel<MainViewModel>()
+    val notificationData = remember(mainViewModel) { mainViewModel.getMeNotificcationsList() }
 
     Dialog(
         onDismissRequest = {},
@@ -66,16 +62,25 @@ fun ChatIntentScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text("TopBar")
+                    Spacer(Modifier.weight(1f))
+                    TextButton(onClick = onMinimize) {
+                        Text("Minimize")
+                    }
                 }
                 NotificationView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                    notificationItems = mainViewModel.getMeNotificcationsList()
+                    notificationData = notificationData
                 )
-                IntentContent( onConfirm = onConfirm)
+                IntentContent(onConfirm = onConfirm)
             }
         }
     }
@@ -88,28 +93,16 @@ fun Context.getActivity(): AppCompatActivity? = when (this) {
 }
 
 @Composable
-fun NotificationView(notificationItems: NotificationData, modifier: Modifier = Modifier) {
-    val activity = LocalActivity.current
-    Log.d("NotificationView","items = $notificationItems")
+fun NotificationView(notificationData: NotificationData, modifier: Modifier = Modifier) {
     AndroidView(
         modifier = modifier,
         factory = { context ->
-            Log.d(TAG, "$context")
-            //activity?.let {
-            Log.d(TAG, "NotificationView: activity is not null $")
-            NotificationView(context = context) //}
-            /*?: run {
-                Log.d(TAG, "NotificationView: ")
-                NotificationView(context = context).apply {
-                    hideDetailsButton()
-                }
-            }*/
+            NotificationView(context = context)
         },
         update = { notificationView ->
-            notificationView.setNotificationData(notificationItems)
+            notificationView.setNotificationData(notificationData)
         }
     )
-
 }
 
 
@@ -123,18 +116,14 @@ private fun IntentContent(
             .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        var showSubIntents by remember { mutableStateOf(false) }
-
         Spacer(modifier = Modifier.padding(top = 40.dp))
 
-        // Icon
         Image(
             painter = painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = "dsds",
+            contentDescription = "App icon",
             modifier = Modifier.size(32.dp)
         )
 
-        // Subtitle
         Text(
             text = "Subtitle text goes here....",
             textAlign = TextAlign.Center,
@@ -146,7 +135,6 @@ private fun IntentContent(
                 .padding(vertical = 16.dp)
         )
 
-        // Description
         Text(
             text = "Descr.....",
             textAlign = TextAlign.Center,
@@ -158,6 +146,10 @@ private fun IntentContent(
             modifier = Modifier
                 .padding(bottom = 24.dp)
         )
+
+        Button(onClick = onConfirm) {
+            Text("Confirm")
+        }
     }
 }
 

@@ -1,4 +1,3 @@
-@file:OptIn(ExperimentalFlexBoxApi::class)
 
 package com.example.recentreleasesamplse
 
@@ -6,17 +5,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalFlexBoxApi
 import androidx.compose.foundation.layout.FlexAlignItems
 import androidx.compose.foundation.layout.FlexAlignSelf
 import androidx.compose.foundation.layout.FlexBox
 import androidx.compose.foundation.layout.FlexDirection
-import androidx.compose.foundation.layout.FlexJustifyContent
 import androidx.compose.foundation.layout.FlexWrap
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
@@ -30,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.random.Random
 
-@OptIn(ExperimentalFlexBoxApi::class)
 @Preview(showSystemUi = true, device = PIXEL_9_PRO_XL)
 @Composable
 fun SimpleFlexBox() {
@@ -47,7 +44,8 @@ fun SimpleFlexBox() {
             )
             wrap(FlexWrap.Wrap)
             alignItems(FlexAlignItems.Start)
-            justifyContent(FlexJustifyContent.SpaceBetween)
+//            justifyContent(FlexJustifyContent.SpaceBetween)
+//            alignContent()
             gap(8.dp)
         },
     ) {
@@ -90,7 +88,11 @@ fun SimpleFlexBox() {
 @Preview(showSystemUi = true, device = PIXEL_9_PRO_XL)
 @Composable
 fun SimpleRowFlexBox() {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Text(text = "Row", fontSize = 32.sp)
         FlexBoxRowDemo()
         Spacer(Modifier.height(24.dp))
@@ -152,7 +154,10 @@ private fun FlexBoxRowWrapDemo() {
 // RowReverse sample
 @Composable
 private fun FlexBoxRowReverseDemo() {
-    FlexBox(config = { direction(FlexDirection.RowReverse) }, modifier = Modifier.fillMaxWidth()) {
+    FlexBox(
+        config = { direction(FlexDirection.RowReverse) },
+        modifier = Modifier.fillMaxWidth()
+    ) {
         repeat(4) {
             Box(
                 modifier =

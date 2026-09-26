@@ -1,9 +1,5 @@
-@file:OptIn(ExperimentalFlexBoxApi::class)
 
 package com.example.recentreleasesamplse
-
-import androidx.compose.foundation.layout.ExperimentalFlexBoxApi
-import androidx.compose.material3.Text
 
 
 /*
@@ -25,7 +21,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlexAlignSelf
 import androidx.compose.foundation.layout.FlexBasis
 import androidx.compose.foundation.layout.FlexBox
 import androidx.compose.foundation.layout.FlexDirection
@@ -34,9 +29,11 @@ import androidx.compose.foundation.layout.FlexWrap
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,9 +50,12 @@ import kotlin.random.Random
 
 @Composable
 fun FlexBoxFlexDemo() {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .verticalScroll(rememberScrollState())) {
+    Column(
+        modifier = Modifier
+            .safeDrawingPadding()
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
+    ) {
         Spacer(Modifier.height(24.dp))
         Text(text = "Row with flexGrow", fontSize = 20.sp)
         FlexBoxRowFlexGrowSample()
@@ -78,11 +78,14 @@ fun FlexBoxFlexDemo() {
     }
 }
 
+
 @Composable
 private fun FlexBoxRowFlexGrowSample() {
-    FlexBox(modifier = Modifier
-        .fillMaxWidth()
-        .border(1.dp, Color.Black)) {
+    FlexBox(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, Color.Black)
+    ) {
         Box(
             modifier =
                 Modifier
@@ -123,9 +126,11 @@ private fun FlexBoxRowFlexGrowSample() {
 
 @Composable
 private fun FlexBoxRowFlexShrinkSample() {
-    FlexBox(modifier = Modifier
-        .width(300.dp)
-        .border(1.dp, Color.Black)) {
+    FlexBox(
+        modifier = Modifier
+            .width(300.dp)
+            .border(1.dp, Color.Black)
+    ) {
         Box(
             modifier =
                 Modifier
@@ -177,7 +182,7 @@ private fun FlexBoxRowFlexBasisSample() {
                     .border(1.dp, color = Color.Black)
                     .flex {
                         basis(100.dp)
-                       // grow(1f)
+                        // grow(1f)
                     }
         ) {
             Text(text = "basis=100dp", modifier = Modifier.align(Alignment.Center))
@@ -189,8 +194,8 @@ private fun FlexBoxRowFlexBasisSample() {
                     .background(color = randomColor())
                     .border(1.dp, color = Color.Black)
                     .flex {
-                       // basis(50.dp)
-                       grow(1f)
+                        basis(50.dp)
+                        grow(1f)
                     }
         ) {
             Text(text = "basis=50dp, grow=1", modifier = Modifier.align(Alignment.Center))
@@ -311,7 +316,8 @@ private fun FlexBoxColumnFlexBasisSample() {
                     .border(1.dp, color = Color.Black)
                     .flex {
                         basis(50.dp)
-                        grow(1f)
+                        // TODO
+                        //grow(1f)
                     }
         ) {
             Text(text = "basis=50dp, grow=1", modifier = Modifier.align(Alignment.Center))

@@ -1,7 +1,9 @@
 package com.example.recentreleasesamplse
 
+import androidx.compose.runtime.Immutable
 import java.io.Serializable
 
+@Immutable
 public data class NotificationModel(
     val title: String,
     val details: String? = null,
@@ -31,7 +33,8 @@ public data class NotificationModel(
  * @param notificationModels List of NotificationModel
  * @see NotificationModel
  */
-public data class NotificationData(var notificationModels: List<NotificationModel>) :
+@Immutable
+public data class NotificationData(val notificationModels: List<NotificationModel>) :
     java.io.Serializable {
 
     /**
